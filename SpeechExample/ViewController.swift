@@ -45,6 +45,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //self.classifierOutput.layer.cornerRadius = 20
+        //self.classifierOutput.layer.masksToBounds = true
         
         // MARK: One Setup Built-In Sound Classifier Model
         let version1 = SNClassifierIdentifier.version1
@@ -194,6 +196,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var dictation: UILabel!
     
+    @IBOutlet weak var classifierOutput: UILabel!
     
     
 }
@@ -220,7 +223,12 @@ extension ViewController: SNResultsObserving {
         let percentString = String(format: "%.2f%%", percent)
 
         // Print the classification's name (label) with its confidence.
-        print("\(classification.identifier): \(percentString) confidence.\n")
+        let tmpStr = "\(classification.identifier): \(percentString) confidence.\n"
+        print(tmpStr)
+        
+        DispatchQueue.main.async {
+            self.classifierOutput.text = tmpStr
+        }
     }
 
 

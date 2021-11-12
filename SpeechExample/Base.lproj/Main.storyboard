@@ -17,9 +17,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rlf-rS-XAp">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rlf-rS-XAp">
                                 <rect key="frame" x="145" y="630" width="124" height="86"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="86" id="1NM-ij-eR8"/>
+                                    <constraint firstAttribute="width" constant="124" id="ZZy-MK-rWD"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                 <state key="normal">
                                     <imageReference key="image" image="mic.circle" catalog="system" symbolScale="large"/>
@@ -30,19 +33,52 @@
                                     <action selector="recordingReleased:" destination="BYZ-38-t0r" eventType="touchUpInside" id="URD-i0-oif"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.55000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Speech Text Will Appear Here." lineBreakMode="tailTruncation" numberOfLines="9" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OQg-Pv-2Ah">
-                                <rect key="frame" x="20" y="80" width="374" height="542"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.55000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Speech Text Will Appear Here." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="9" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OQg-Pv-2Ah">
+                                <rect key="frame" x="20" y="20" width="374" height="493"/>
                                 <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.55000001192092896" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sound Classification Will Appear Here." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="9" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jNR-0N-nBb">
+                                <rect key="frame" x="20" y="547" width="374" height="82"/>
+                                <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="82" id="K7Y-bh-alw"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="20"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="rlf-rS-XAp" firstAttribute="top" secondItem="jNR-0N-nBb" secondAttribute="bottom" constant="1" id="0LC-Q5-0AQ"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="rlf-rS-XAp" secondAttribute="bottom" constant="20" id="2EI-ZP-qwT"/>
+                            <constraint firstItem="jNR-0N-nBb" firstAttribute="top" secondItem="OQg-Pv-2Ah" secondAttribute="bottom" constant="34" id="9bH-qa-72J"/>
+                            <constraint firstItem="OQg-Pv-2Ah" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="Uyk-wG-nHN"/>
+                            <constraint firstItem="OQg-Pv-2Ah" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="WFD-Cb-mVG"/>
+                            <constraint firstItem="rlf-rS-XAp" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="Wzx-Xx-ddC"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="OQg-Pv-2Ah" secondAttribute="trailing" constant="20" id="Z5b-Tp-Wl2"/>
+                            <constraint firstItem="jNR-0N-nBb" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="aU9-AL-sgs"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="jNR-0N-nBb" secondAttribute="trailing" constant="20" id="xk8-Uv-zBd"/>
+                        </constraints>
                     </view>
                     <connections>
+                        <outlet property="classifierOutput" destination="jNR-0N-nBb" id="bjM-BQ-bFb"/>
                         <outlet property="dictation" destination="OQg-Pv-2Ah" id="Oxs-GZ-8u4"/>
                     </connections>
                 </viewController>
