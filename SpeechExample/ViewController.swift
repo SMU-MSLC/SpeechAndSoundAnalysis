@@ -10,8 +10,9 @@ import AVFoundation
 import Speech
 import SoundAnalysis
 
-
+// ======================================================
 // MUST be using iOS15+ to access the sound analyzer code
+// ======================================================
 // combined the codes from the following places:
 // starter code used from https://github.com/darjeelingsteve/speech-recognition
 // From apple: https://developer.apple.com/documentation/soundanalysis/classifying_sounds_in_an_audio_file
