@@ -64,16 +64,18 @@ class ViewController: UIViewController {
             
         }
 
-        // setup reusable request
-        recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-        
-        // perform on device, if possible
-        // NOTE: this will usually limit the voice analytics results
-        if speechRecogniser.supportsOnDeviceRecognition {
-            print("Using on device recognition, voice analytics may be limited.")
-            recognitionRequest?.requiresOnDeviceRecognition = true
-        }else{
-            print("Using server for recognition.")
+        if recognitionRequest == nil {
+            // setup reusable request (if not already)
+            recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+            
+            // perform on device, if possible
+            // NOTE: this will usually limit the voice analytics results
+            if speechRecogniser.supportsOnDeviceRecognition {
+                print("Using on device recognition, voice analytics may be limited.")
+                recognitionRequest?.requiresOnDeviceRecognition = true
+            }else{
+                print("Using server for recognition.")
+            }
         }
         
 
@@ -123,11 +125,12 @@ class ViewController: UIViewController {
 
     // MARK: UI Elements
     @IBAction func recordingPressed(_ sender: UIButton) {
-        self.startRecording()
-        
         // set button to display "recording"
         sender.setImage(UIImage(systemName: "mic.circle.fill"), for: .normal)
         sender.backgroundColor = UIColor.gray
+        
+        self.startRecording()
+
     }
     
     
