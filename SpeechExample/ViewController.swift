@@ -31,7 +31,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        // can also be changed at runtime via storyBoard!!
+        self.dictation.layer.masksToBounds = true
+        self.dictation.layer.cornerRadius = 20
     }
     
     // MARK: SFAudioTranscription
