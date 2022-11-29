@@ -117,7 +117,7 @@ class ViewController: UIViewController {
             self.recognitionRequest?.append(buffer)
         }
 
-        // this kicks off the entire recording process, adding audio to the queue 
+        // this kicks off the entire recording process, adding audio to the queue
         audioEngine.prepare()
         do{
             try audioEngine.start()
@@ -136,6 +136,8 @@ class ViewController: UIViewController {
 
     // MARK: UI Elements
     @IBAction func recordingPressed(_ sender: UIButton) {
+        // called on "Touch Down" action
+        
         // set button to display "recording"
         sender.setImage(UIImage(systemName: "mic.circle.fill"), for: .normal)
         sender.backgroundColor = UIColor.gray
@@ -146,6 +148,7 @@ class ViewController: UIViewController {
     
     
     @IBAction func recordingReleased(_ sender: UIButton) {
+        //called on "Touch Up Inside" action
         self.stopRecording()
         
         // set button to display "normal"
