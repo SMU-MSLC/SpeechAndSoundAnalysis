@@ -105,7 +105,12 @@ class ViewController: UIViewController {
                 // this will remove the listening tap
                 // so that the transcription stops
                 inputNode.removeTap(onBus: 0)
-                print(result!)
+                if(error != nil){
+                    print(error)
+                }
+                else{
+                    print(result!)
+                }
             }
         }
         
