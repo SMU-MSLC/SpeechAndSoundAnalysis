@@ -15,16 +15,16 @@ import Speech
 class ViewController: UIViewController {
 
     // MARK: Properties
-    // The speech recogniser used by the controller to record the user's speech.
+    /// The speech recogniser used by the controller to record the user's speech.
     private let speechRecogniser = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))!
         
-    // The current speech recognition request. Created when the user wants to begin speech recognition
+    /// The current speech recognition request. Created when the user wants to begin speech recognition
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
         
-    // The current speech recognition task. Created when the user wants to begin speech recognition.
+    /// The current speech recognition task. Created when the user wants to begin speech recognition.
     private var recognitionTask: SFSpeechRecognitionTask?
         
-    // The audio engine used to record input from the microphone.
+    /// The audio engine used to record input from the microphone.
     private let audioEngine = AVAudioEngine()
 
     // MARK: UI LifeCycle
@@ -80,14 +80,17 @@ class ViewController: UIViewController {
             }
         }
         
-
+        // get a handle to microphone input handler
         let inputNode = audioEngine.inputNode
         guard let recognitionRequest = recognitionRequest else {
             // Handle error
             return
         }
         
+        // define recognition task handling
         recognitionTask = speechRecogniser.recognitionTask(with: recognitionRequest) { [unowned self] result, error in
+            
+            // if results is not nil, update label with transcript
             if let result = result {
                 let spokenText = result.bestTranscription.formattedString
                 DispatchQueue.main.async{
@@ -96,6 +99,8 @@ class ViewController: UIViewController {
                 }
             }
             
+            // if the result is complete, stop listening to microphone
+            // this can happen if the user lifts finger from button OR request times out
             if result?.isFinal ?? (error != nil) {
                 // this will remove the listening tap
                 // so that the transcription stops
@@ -104,11 +109,15 @@ class ViewController: UIViewController {
             }
         }
         
+        // now setup input node to send buffers to the transcript
+        // this is a block that is called continuously
         let recordingFormat = inputNode.outputFormat(forBus: 0)
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
+            // this is a fast operation, only adding to the audio queue
             self.recognitionRequest?.append(buffer)
         }
 
+        // this kicks off the entire recording process, adding audio to the queue 
         audioEngine.prepare()
         do{
             try audioEngine.start()
