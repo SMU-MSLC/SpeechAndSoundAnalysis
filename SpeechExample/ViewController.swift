@@ -23,6 +23,7 @@ class ViewController: UIViewController {
         
     /// The current speech recognition task. Created when the user wants to begin speech recognition.
     private var recognitionTask: SFSpeechRecognitionTask?
+    var inputNode: AVAudioInputNode?
         
     /// The audio engine used to record input from the microphone.
     private let audioEngine = AVAudioEngine()
@@ -36,7 +37,36 @@ class ViewController: UIViewController {
         //self.dictation.layer.cornerRadius = 2
     }
     
-    // MARK: SFAudioTranscription
+    
+
+    // MARK: UI Elements
+    @IBAction func recordingPressed(_ sender: UIButton) {
+        // called on "Touch Down" action
+        
+        // set button to display "recording"
+        sender.setImage(UIImage(systemName: "mic.circle.fill"), for: .normal)
+        sender.backgroundColor = UIColor.gray
+        
+        self.startRecording()
+
+    }
+    
+    
+    @IBAction func recordingReleased(_ sender: UIButton) {
+        //called on "Touch Up Inside" action
+        self.stopRecording()
+        
+        // set button to display "normal"
+        sender.setImage(UIImage(systemName: "mic.circle"), for: .normal)
+        sender.backgroundColor = UIColor.white
+    }
+    
+    @IBOutlet weak var dictation: UILabel!
+}
+
+// MARK: SFAudioTranscription
+extension ViewController{
+    
     func startRecording() {
         // setup recongizer
         guard speechRecogniser.isAvailable else {
@@ -81,43 +111,19 @@ class ViewController: UIViewController {
         }
         
         // get a handle to microphone input handler
-        let inputNode = audioEngine.inputNode
+        self.inputNode = audioEngine.inputNode
         guard let recognitionRequest = recognitionRequest else {
             // Handle error
             return
         }
         
-        // define recognition task handling
-        recognitionTask = speechRecogniser.recognitionTask(with: recognitionRequest) { [unowned self] result, error in
-            
-            // if results is not nil, update label with transcript
-            if let result = result {
-                let spokenText = result.bestTranscription.formattedString
-                DispatchQueue.main.async{
-                    // fill in the label here
-                    self.dictation.text = spokenText
-                }
-            }
-            
-            // if the result is complete, stop listening to microphone
-            // this can happen if the user lifts finger from button OR request times out
-            if result?.isFinal ?? (error != nil) {
-                // this will remove the listening tap
-                // so that the transcription stops
-                inputNode.removeTap(onBus: 0)
-                if(error != nil){
-                    print(error)
-                }
-                else{
-                    print(result!)
-                }
-            }
-        }
-        
+        // define recognition task handling, set handler
+        recognitionTask = speechRecogniser.recognitionTask(with: recognitionRequest, resultHandler: self.recognitionResultHandler)
+          
         // now setup input node to send buffers to the transcript
         // this is a block that is called continuously
-        let recordingFormat = inputNode.outputFormat(forBus: 0)
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
+        let recordingFormat = inputNode!.outputFormat(forBus: 0)
+        inputNode!.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
             // this is a fast operation, only adding to the audio queue
             self.recognitionRequest?.append(buffer)
         }
@@ -138,29 +144,31 @@ class ViewController: UIViewController {
             recognitionRequest?.endAudio()
         }
     }
-
-    // MARK: UI Elements
-    @IBAction func recordingPressed(_ sender: UIButton) {
-        // called on "Touch Down" action
+    
+    func recognitionResultHandler(result:SFSpeechRecognitionResult?, error:Error?) -> Void{
+        // if results is not nil, update label with transcript
+        if let result = result {
+            let spokenText = result.bestTranscription.formattedString
+            DispatchQueue.main.async{
+                // fill in the label here
+                self.dictation.text = spokenText
+            }
+        }
         
-        // set button to display "recording"
-        sender.setImage(UIImage(systemName: "mic.circle.fill"), for: .normal)
-        sender.backgroundColor = UIColor.gray
-        
-        self.startRecording()
-
+        // if the result is complete, stop listening to microphone
+        // this can happen if the user lifts finger from button OR request times out
+        // ?? is used if anything fails to unwrap in expression
+        if result?.isFinal ?? (error != nil) {
+            // this will remove the listening tap
+            // so that the transcription stops
+            self.inputNode!.removeTap(onBus: 0)
+            if(error != nil){
+                print(error!)
+            }
+            else{
+                print(result!)
+            }
+        }
     }
     
-    
-    @IBAction func recordingReleased(_ sender: UIButton) {
-        //called on "Touch Up Inside" action
-        self.stopRecording()
-        
-        // set button to display "normal"
-        sender.setImage(UIImage(systemName: "mic.circle"), for: .normal)
-        sender.backgroundColor = UIColor.white
-    }
-    
-    @IBOutlet weak var dictation: UILabel!
 }
-
