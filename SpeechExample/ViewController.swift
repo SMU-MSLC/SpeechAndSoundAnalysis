@@ -59,7 +59,35 @@ class ViewController: UIViewController {
 
     }
     
-    // MARK: SFAudioTranscription
+
+    // MARK: UI Elements
+    @IBAction func recordingPressed(_ sender: UIButton) {
+        // set button to display "recording"
+        sender.setImage(UIImage(systemName: "mic.circle.fill"), for: .normal)
+        sender.backgroundColor = UIColor.gray
+        
+        self.startRecording()
+    }
+    
+    
+    @IBAction func recordingReleased(_ sender: UIButton) {
+        self.stopRecording()
+        
+        // set button to display "normal"
+        sender.setImage(UIImage(systemName: "mic.circle"), for: .normal)
+        sender.backgroundColor = UIColor.white
+    }
+    
+    @IBOutlet weak var dictation: UILabel!
+    
+    @IBOutlet weak var classifierOutput: UILabel!
+    
+    
+}
+
+// MARK: SFAudioTranscription and SNClassification
+extension ViewController{
+    
     func startRecording() {
         // setup speech recongizer
         guard speechRecogniser.isAvailable else {
@@ -151,7 +179,7 @@ class ViewController: UIViewController {
             // MARK: Three Analyze buffers of audio
             // here we try to classify the audio stream for classification
             self.analysisQueue.async {
-                // perform on bakcground thread as this classifier can take a bit of time
+                // perform on background thread to ensure the UI does not suffer
                 self.streamAnalyzer!.analyze(buffer,
                                 atAudioFramePosition: when.sampleTime)
             }
@@ -171,34 +199,11 @@ class ViewController: UIViewController {
     func stopRecording() {
         if audioEngine.isRunning{
             audioEngine.stop()
+            // finalize the classifier 
             recognitionRequest?.endAudio()
         
         }
     }
-
-    // MARK: UI Elements
-    @IBAction func recordingPressed(_ sender: UIButton) {
-        // set button to display "recording"
-        sender.setImage(UIImage(systemName: "mic.circle.fill"), for: .normal)
-        sender.backgroundColor = UIColor.gray
-        
-        self.startRecording()
-    }
-    
-    
-    @IBAction func recordingReleased(_ sender: UIButton) {
-        self.stopRecording()
-        
-        // set button to display "normal"
-        sender.setImage(UIImage(systemName: "mic.circle"), for: .normal)
-        sender.backgroundColor = UIColor.white
-    }
-    
-    @IBOutlet weak var dictation: UILabel!
-    
-    @IBOutlet weak var classifierOutput: UILabel!
-    
-    
 }
 
 /// An observer that receives results from a classify sound request.
