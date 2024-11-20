@@ -32,6 +32,10 @@ class ViewController: UIViewController {
     /// The audio engine used to record input from the microphone.
     private let audioEngine = AVAudioEngine()
     
+    // MARK: UI Outlets
+    @IBOutlet weak var dictation: UILabel!
+    @IBOutlet weak var classifierOutput: UILabel!
+    
     
     // MARK: Sound Analyzer Properties
     /// The request we qill use for the cound classifier
@@ -78,9 +82,7 @@ class ViewController: UIViewController {
         sender.backgroundColor = UIColor.white
     }
     
-    @IBOutlet weak var dictation: UILabel!
-    
-    @IBOutlet weak var classifierOutput: UILabel!
+
     
     
 }
